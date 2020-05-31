@@ -1,16 +1,11 @@
 { lib, pkgs, config, ... }:
 
-with lib;
-
 let
-  defaultUser = "andy";
-  syschdemd = import ./syschdemd.nix { inherit lib pkgs config defaultUser; };
-in
-{
-  imports = [
-    <nixpkgs/nixos/modules/profiles/minimal.nix>
-  ];
-
+  defaultUser = "root";
+  syschdemd = import ./syschdemd.nix {
+    inherit lib pkgs config defaultUser;
+  };
+in {
   # WSL is closer to a container than anything else
   boot.isContainer = true;
 
@@ -19,15 +14,13 @@ in
 
   networking.dhcpcd.enable = false;
 
-  users.users.${defaultUser} = {
-    isNormalUser = true;
-  };
-
   users.users.root = {
     shell = "${syschdemd}/bin/syschdemd";
     # Otherwise WSL fails to login as root with "initgroups failed 5"
     extraGroups = [ "root" ];
   };
+
+  # --USER_PLACEHOLDER--
 
   # Described as "it should not be overwritten" in NixOS documentation,
   # but it's on /run per default and WSL mounts /run as a tmpfs, hence

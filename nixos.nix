@@ -1,10 +1,7 @@
-# Build with
-#   nix-build -A system -A config.system.build.tarball ./nixos.nix
-
 import <nixpkgs/nixos> {
   configuration = {
     imports = [
-      ./configuration.nix
+      ./system/configuration.nix
       ./build-tarball.nix
     ];
   };

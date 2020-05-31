@@ -2,7 +2,6 @@
 
 let
   nixpkgs = import <nixpkgs> {};
-
   inherit (nixpkgs) daemonize;
 in
 pkgs.substituteAll {

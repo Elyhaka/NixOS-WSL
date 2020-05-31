@@ -22,5 +22,13 @@ if [ ! -e "/run/systemd.pid" ]; then
     /run/current-system/sw/bin/pgrep -xf systemd > /run/systemd.pid
 fi
 
-userShell=$($sw/getent passwd @defaultUser@ | $sw/cut -d: -f7)
-exec $sw/nsenter -t $(< /run/systemd.pid) -p -m --wd="$PWD" -- @wrapperDir@/su -s $userShell @defaultUser@
+usedShell=$($sw/getent passwd @defaultUser@ | $sw/cut -d: -f7)
+
+# While bootstraping the image, we need to execute command inside without having a default user.
+if [[ "@defaultUser@" == "root" ]]; then
+    usedShell="/bin/sh"
+fi
+
+# Entering the namespace where systemd is PID1
+exec $sw/nsenter -t $(< /run/systemd.pid) -p -m --wd="$PWD" -- \
+    @wrapperDir@/su -s $usedShell @defaultUser@ "$@"
