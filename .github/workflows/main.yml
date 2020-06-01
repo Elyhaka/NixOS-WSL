@@ -12,9 +12,11 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install nixpkgs
-      run: curl -L https://nixos.org/nix/install | sh
+      run: |
+        curl -L https://nixos.org/nix/install | sh
+        source /home/runner/.nix-profile/etc/profile.d/nix.sh
 
-    - name: Run a multi-line script
+    - name: Build image itself
       run: ./build.sh ./install.tar.gz
 
     - name: Upload the artifacts
