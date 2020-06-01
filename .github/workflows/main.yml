@@ -17,7 +17,7 @@ jobs:
         source /home/runner/.nix-profile/etc/profile.d/nix.sh
         ./build.sh ./install.tar.gz
 
-    - name: Upload the artifacts
+    - name: Upload the generated image
       uses: skx/github-action-publish-binaries@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
