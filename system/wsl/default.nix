@@ -2,6 +2,7 @@
 
 let
   defaultUser = "root";
+
   syschdemd = import ./syschdemd.nix {
     inherit lib pkgs config defaultUser;
   };
