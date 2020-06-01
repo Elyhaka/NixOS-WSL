@@ -1,0 +1,25 @@
+name: Generate WSL NixOS Image
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install nixpkgs
+      run: curl -L https://nixos.org/nix/install | sh
+
+    - name: Run a multi-line script
+      run: ./build.sh ./install.tar.gz
+
+    - name: Upload the artifacts
+      uses: skx/github-action-publish-binaries@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: 'install.tar.gz'
